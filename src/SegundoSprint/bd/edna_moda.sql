@@ -1,3 +1,4 @@
+
 -- =============================================================
 -- BASE DE DATOS: TALLER EDNA MODA
 -- Sprint #2 - [BD3] Modelo Relacional + [BD4] Creación BBDD
@@ -161,3 +162,6 @@ INSERT INTO cita_aprendices (id_cita, id_aprendiz) VALUES
 (1, 6),
 (2, 5),
 (4, 6);
+
+
+
