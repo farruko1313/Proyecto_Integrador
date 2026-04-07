@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS empleados (
     apellidos     VARCHAR(100) NOT NULL,
     apodo         VARCHAR(50)  NOT NULL UNIQUE,   -- nombre en clave / usuario de login
     categoria     ENUM('Aprendiz','Oficial','Maestro') NOT NULL,
-    password      VARCHAR(255) NOT NULL            -- almacenado con hash (ej. SHA-256)
+    password      VARCHAR(255) NOT NULL            -- almacenado con hash 
 );
 
 CREATE INDEX idx_empleados_apodo ON empleados(apodo);
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS clientes (
     nombre_superheroe VARCHAR(100) NOT NULL,
     superpoder       VARCHAR(200),
     colores          VARCHAR(200),
-    tipo             ENUM('Heroe','Villano') DEFAULT NULL  -- BONUS: distinguir héroe/villano
+    tipo             ENUM('Heroe','Villano') DEFAULT NULL  -- distinguir héroe/villano
 );
 
 CREATE INDEX idx_clientes_nombre ON clientes(nombre_superheroe);
@@ -157,6 +157,7 @@ INSERT INTO citas (id_cliente, id_traje, id_empleado_responsable, id_taller, dia
 (5, 7, 4, 4, '2026-03-22', '12:00:00', 1);
 
 -- Aprendices asignados a citas
+
 INSERT INTO cita_aprendices (id_cita, id_aprendiz) VALUES
 (1, 5),
 (1, 6),
