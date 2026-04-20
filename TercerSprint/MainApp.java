@@ -11,12 +11,11 @@ import javax.swing.UIManager;
  * Punto de entrada de la aplicación del Taller de Edna Moda (Sprint #3).
  * Integra Vista (Sprint 2) + Control (Sprint 3) + Modelo (Sprint 3).
  *
- * <p>Pasos:</p>
- * <ol>
- *   <li>Aplica el Look &amp; Feel del sistema.</li>
- *   <li>Comprueba la conexión con la BBDD <code>edna_moda</code>.</li>
- *   <li>Abre la ventana de login conectada con su controlador.</li>
- * </ol>
+ * 
+ * Pasos:
+ * -Aplica el Look & Feel del sistema.
+ * -Comprueba la conexión con la BBDD
+ * -Abre la ventana de login conectada con su controlador.
  *
  * @author Equipo Proyecto Integrador 1ºDAW
  */
