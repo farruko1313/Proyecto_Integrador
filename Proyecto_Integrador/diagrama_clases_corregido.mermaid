@@ -1,0 +1,276 @@
+classDiagram
+    %% =======================
+    %% PUNTO DE ENTRADA
+    %% =======================
+    class MainApp {
+        +main(args: String[])
+    }
+
+    %% =======================
+    %% ENTIDADES (MODELO)
+    %% =======================
+    class Empleado {
+        -identificador: int
+        -nombreApellidos: String
+        -apodo: String
+        -categoria: String
+        +getApodo()
+        +getCategoria()
+    }
+
+    class Cliente {
+        -numeroCliente: int
+        -nombre: String
+        -superpoder: String
+        -colores: String
+        +modificarDatos()
+    }
+
+    class Taller {
+        -numeroTaller: int
+        -nombreSala: String
+        -tipoSala: String
+        +modificarTaller()
+    }
+
+    class Traje {
+        -identificador: int
+        -nombre: String
+        -estado: Estado
+        +cambiarEstado()
+    }
+
+    class Cita {
+        -identificador: int
+        -dia: String
+        -hora: String
+        -duracion: int
+        +asignarEmpleado()
+        +cambiarHorario()
+    }
+
+    class SesionActual {
+        -empleadoLogueado: Empleado
+        +iniciar(e: Empleado)
+        +cerrar()
+        +getEmpleado()
+        +haySesion()
+    }
+
+    %% =======================
+    %% CAPA DE ACCESO A DATOS (DAO)
+    %% =======================
+    class ConexionBD {
+        -URL: String
+        -USUARIO: String
+        -PASSWORD: String
+        +configurar(url, usuario, password)
+        +getConnection()
+        +probarConexion()
+    }
+
+    class EmpleadoDAO {
+        +listarEmpleados()
+        +buscarPorApodo(apodo: String)
+        +crearEmpleado(e: Empleado)
+        +modificarEmpleado(e: Empleado)
+        +borrarEmpleado(id: int)
+    }
+
+    class ClienteDAO {
+        +listarClientes()
+        +crearCliente(c: Cliente)
+        +modificarCliente(c: Cliente)
+        +borrarCliente(id: int)
+    }
+
+    class TallerDAO {
+        +listarTalleres()
+        +crearTaller(t: Taller)
+        +modificarTaller(t: Taller)
+        +borrarTaller(id: int)
+    }
+
+    class TrajeDAO {
+        +listarTrajes()
+        +listarTrajesDeCliente(idCliente: int)
+        +crearTraje(t: Traje)
+        +cambiarEstado(idTraje: int, estado: Estado)
+        +borrarTraje(id: int)
+    }
+
+    class CitaDAO {
+        +listarCitas()
+        +listarCitasDeEmpleado(idEmp: int)
+        +crearCita(c: Cita)
+        +modificarCita(c: Cita)
+        +borrarCita(id: int)
+    }
+
+    %% =======================
+    %% CONTROLADORES
+    %% =======================
+    class LoginControlador {
+        -vista: LoginVista
+        -empleadoDAO: EmpleadoDAO
+        +intentarLogin(apodo, password)
+    }
+
+    class ClientesControlador {
+        -vista: ClientesVista
+        -clienteDAO: ClienteDAO
+        -trajeDAO: TrajeDAO
+        +listarClientes()
+        +crearCliente(c: Cliente)
+        +modificarCliente(c: Cliente)
+        +borrarCliente(id: int)
+        +listarTrajesDe(idCliente: int)
+        +crearTraje(t: Traje)
+        +cambiarEstadoTraje(idTraje, estado)
+        +borrarTraje(id: int)
+    }
+
+    class CitasControlador {
+        -vista: CitasVista
+        -citaDAO: CitaDAO
+        -clienteDAO: ClienteDAO
+        +listarCitasVisibles()
+        +listarMisCitas()
+        +crearCita(c: Cita)
+        +modificarCita(c: Cita)
+        +borrarCita(id: int)
+    }
+
+    class TalleresControlador {
+        -vista: TalleresVista
+        -tallerDAO: TallerDAO
+        +listarTalleres()
+        +crearTaller(t: Taller)
+        +modificarTaller(t: Taller)
+        +borrarTaller(id: int)
+    }
+
+    %% =======================
+    %% VISTAS
+    %% =======================
+    class Vista {
+        <<interface>>
+        +mostrar()
+        +cerrar()
+    }
+
+    class LoginVista {
+        -txtApodo
+        -txtPassword
+        -btnLogin
+        -lblError
+        +getApodo()
+        +getPassword()
+        +mostrarError()
+        +limpiarError()
+    }
+
+    class VentanaPrincipal {
+        -empleadoApodo
+        -categoriaEmpleado
+        -menuCitas
+        -menuTalleres
+        -menuClientes
+        -lblBienvenida
+        +construirMenu()
+        +construirPanelCentral()
+        +aplicarPermisos()
+    }
+
+    class ClientesVista {
+        -tablaClientes
+        -modeloTabla
+        -btnNuevoCliente
+        -btnEditarCliente
+        -btnBorrarCliente
+        -btnVerTrajes
+        +construirUI()
+        +cargarClientes()
+        +getIdClienteSeleccionado()
+    }
+
+    class CitasVista {
+        -tablaCitas
+        -modeloTabla
+        -btnNuevaCita
+        -btnEditarCita
+        -btnBorrarCita
+        -cmbFiltro
+        +construirUI()
+        +aplicarPermisos()
+        +cargarCitas()
+        +getIdCitaSeleccionada()
+        +getFiltroSeleccionado()
+    }
+
+    class TalleresVista {
+        -tablaTalleres
+        -modeloTabla
+        -btnNuevoTaller
+        -btnEditarTaller
+        -btnBorrarTaller
+        +construirUI()
+        +cargarTalleres()
+        +getIdTallerSeleccionado()
+    }
+
+    %% =======================
+    %% RELACIONES - ENTRADA
+    %% =======================
+    MainApp --> LoginControlador : lanza
+    MainApp --> ConexionBD : inicializa
+
+    %% Vistas implementan Vista
+    LoginVista ..|> Vista
+    VentanaPrincipal ..|> Vista
+    ClientesVista ..|> Vista
+    CitasVista ..|> Vista
+    TalleresVista ..|> Vista
+
+    %% Controladores <-> Vistas
+    LoginControlador --> LoginVista : usa
+    ClientesControlador --> ClientesVista : usa
+    CitasControlador --> CitasVista : usa
+    TalleresControlador --> TalleresVista : usa
+    VentanaPrincipal --> ClientesControlador : abre
+    VentanaPrincipal --> CitasControlador : abre
+    VentanaPrincipal --> TalleresControlador : abre
+
+    %% Login lanza ventana principal
+    LoginControlador --> VentanaPrincipal : al autenticar
+    LoginControlador --> SesionActual : inicia
+
+    %% Controladores -> DAOs
+    LoginControlador --> EmpleadoDAO
+    ClientesControlador --> ClienteDAO
+    ClientesControlador --> TrajeDAO
+    CitasControlador --> CitaDAO
+    CitasControlador --> ClienteDAO
+    TalleresControlador --> TallerDAO
+
+    %% DAOs -> ConexionBD
+    EmpleadoDAO --> ConexionBD
+    ClienteDAO --> ConexionBD
+    TallerDAO --> ConexionBD
+    TrajeDAO --> ConexionBD
+    CitaDAO --> ConexionBD
+
+    %% DAOs -> Entidades (devuelven/persisten)
+    EmpleadoDAO ..> Empleado
+    ClienteDAO ..> Cliente
+    TallerDAO ..> Taller
+    TrajeDAO ..> Traje
+    CitaDAO ..> Cita
+
+    %% Relaciones entre entidades
+    Cliente "1" --> "*" Traje : tiene
+    Cita "*" --> "1" Cliente : reserva
+    Cita "*" --> "1" Empleado : atiende
+    Cita "*" --> "1" Taller : usa
+    Cita "0..1" --> "1" Traje : se usa en
+    SesionActual --> Empleado : guarda

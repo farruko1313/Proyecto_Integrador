@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Diagrama de Clases - Proyecto Integrador (Corregido)</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, sans-serif;
+    background: #f5f7fa;
+  }
+  header {
+    background: #1f2937;
+    color: white;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  header h1 { margin: 0; font-size: 18px; font-weight: 600; }
+  header button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  header button:hover { background: #1d4ed8; }
+  #diagram-container {
+    padding: 24px;
+    overflow: auto;
+  }
+  .mermaid {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  footer {
+    text-align: center;
+    padding: 10px;
+    color: #6b7280;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Diagrama de Clases — Proyecto Integrador (corregido)</h1>
+  <button onclick="downloadSVG()">Descargar SVG</button>
+</header>
+
+<div id="diagram-container">
+<pre class="mermaid">
+classDiagram
+    %% PUNTO DE ENTRADA
+    class MainApp {
+        +main(args: String[])
+    }
+
+    %% ENTIDADES (MODELO)
+    class Empleado {
+        -identificador: int
+        -nombreApellidos: String
+        -apodo: String
+        -categoria: String
+        +getApodo()
+        +getCategoria()
+    }
+    class Cliente {
+        -numeroCliente: int
+        -nombre: String
+        -superpoder: String
+        -colores: String
+        +modificarDatos()
+    }
+    class Taller {
+        -numeroTaller: int
+        -nombreSala: String
+        -tipoSala: String
+        +modificarTaller()
+    }
+    class Traje {
+        -identificador: int
+        -nombre: String
+        -estado: Estado
+        +cambiarEstado()
+    }
+    class Cita {
+        -identificador: int
+        -dia: String
+        -hora: String
+        -duracion: int
+        +asignarEmpleado()
+        +cambiarHorario()
+    }
+    class SesionActual {
+        -empleadoLogueado: Empleado
+        +iniciar(e: Empleado)
+        +cerrar()
+        +getEmpleado()
+        +haySesion()
+    }
+
+    %% CAPA DE ACCESO A DATOS (DAO)
+    class ConexionBD {
+        -URL: String
+        -USUARIO: String
+        -PASSWORD: String
+        +configurar(url, usuario, password)
+        +getConnection()
+        +probarConexion()
+    }
+    class EmpleadoDAO {
+        +listarEmpleados()
+        +buscarPorApodo(apodo: String)
+        +crearEmpleado(e: Empleado)
+        +modificarEmpleado(e: Empleado)
+        +borrarEmpleado(id: int)
+    }
+    class ClienteDAO {
+        +listarClientes()
+        +crearCliente(c: Cliente)
+        +modificarCliente(c: Cliente)
+        +borrarCliente(id: int)
+    }
+    class TallerDAO {
+        +listarTalleres()
+        +crearTaller(t: Taller)
+        +modificarTaller(t: Taller)
+        +borrarTaller(id: int)
+    }
+    class TrajeDAO {
+        +listarTrajes()
+        +listarTrajesDeCliente(idCliente: int)
+        +crearTraje(t: Traje)
+        +cambiarEstado(idTraje: int, estado: Estado)
+        +borrarTraje(id: int)
+    }
+    class CitaDAO {
+        +listarCitas()
+        +listarCitasDeEmpleado(idEmp: int)
+        +crearCita(c: Cita)
+        +modificarCita(c: Cita)
+        +borrarCita(id: int)
+    }
+
+    %% CONTROLADORES
+    class LoginControlador {
+        -vista: LoginVista
+        -empleadoDAO: EmpleadoDAO
+        +intentarLogin(apodo, password)
+    }
+    class ClientesControlador {
+        -vista: ClientesVista
+        -clienteDAO: ClienteDAO
+        -trajeDAO: TrajeDAO
+        +listarClientes()
+        +crearCliente(c: Cliente)
+        +modificarCliente(c: Cliente)
+        +borrarCliente(id: int)
+        +listarTrajesDe(idCliente: int)
+        +crearTraje(t: Traje)
+        +cambiarEstadoTraje(idTraje, estado)
+        +borrarTraje(id: int)
+    }
+    class CitasControlador {
+        -vista: CitasVista
+        -citaDAO: CitaDAO
+        -clienteDAO: ClienteDAO
+        +listarCitasVisibles()
+        +listarMisCitas()
+        +crearCita(c: Cita)
+        +modificarCita(c: Cita)
+        +borrarCita(id: int)
+    }
+    class TalleresControlador {
+        -vista: TalleresVista
+        -tallerDAO: TallerDAO
+        +listarTalleres()
+        +crearTaller(t: Taller)
+        +modificarTaller(t: Taller)
+        +borrarTaller(id: int)
+    }
+
+    %% VISTAS
+    class Vista {
+        <<interface>>
+        +mostrar()
+        +cerrar()
+    }
+    class LoginVista {
+        -txtApodo
+        -txtPassword
+        -btnLogin
+        -lblError
+        +getApodo()
+        +getPassword()
+        +mostrarError()
+        +limpiarError()
+    }
+    class VentanaPrincipal {
+        -empleadoApodo
+        -categoriaEmpleado
+        -menuCitas
+        -menuTalleres
+        -menuClientes
+        -lblBienvenida
+        +construirMenu()
+        +construirPanelCentral()
+        +aplicarPermisos()
+    }
+    class ClientesVista {
+        -tablaClientes
+        -modeloTabla
+        -btnNuevoCliente
+        -btnEditarCliente
+        -btnBorrarCliente
+        -btnVerTrajes
+        +construirUI()
+        +cargarClientes()
+        +getIdClienteSeleccionado()
+    }
+    class CitasVista {
+        -tablaCitas
+        -modeloTabla
+        -btnNuevaCita
+        -btnEditarCita
+        -btnBorrarCita
+        -cmbFiltro
+        +construirUI()
+        +aplicarPermisos()
+        +cargarCitas()
+        +getIdCitaSeleccionada()
+        +getFiltroSeleccionado()
+    }
+    class TalleresVista {
+        -tablaTalleres
+        -modeloTabla
+        -btnNuevoTaller
+        -btnEditarTaller
+        -btnBorrarTaller
+        +construirUI()
+        +cargarTalleres()
+        +getIdTallerSeleccionado()
+    }
+
+    %% RELACIONES
+    MainApp --> LoginControlador : lanza
+    MainApp --> ConexionBD : inicializa
+
+    LoginVista ..|> Vista
+    VentanaPrincipal ..|> Vista
+    ClientesVista ..|> Vista
+    CitasVista ..|> Vista
+    TalleresVista ..|> Vista
+
+    LoginControlador --> LoginVista : usa
+    ClientesControlador --> ClientesVista : usa
+    CitasControlador --> CitasVista : usa
+    TalleresControlador --> TalleresVista : usa
+    VentanaPrincipal --> ClientesControlador : abre
+    VentanaPrincipal --> CitasControlador : abre
+    VentanaPrincipal --> TalleresControlador : abre
+
+    LoginControlador --> VentanaPrincipal : al autenticar
+    LoginControlador --> SesionActual : inicia
+
+    LoginControlador --> EmpleadoDAO
+    ClientesControlador --> ClienteDAO
+    ClientesControlador --> TrajeDAO
+    CitasControlador --> CitaDAO
+    CitasControlador --> ClienteDAO
+    TalleresControlador --> TallerDAO
+
+    EmpleadoDAO --> ConexionBD
+    ClienteDAO --> ConexionBD
+    TallerDAO --> ConexionBD
+    TrajeDAO --> ConexionBD
+    CitaDAO --> ConexionBD
+
+    EmpleadoDAO ..> Empleado
+    ClienteDAO ..> Cliente
+    TallerDAO ..> Taller
+    TrajeDAO ..> Traje
+    CitaDAO ..> Cita
+
+    Cliente "1" --> "*" Traje : tiene
+    Cita "*" --> "1" Cliente : reserva
+    Cita "*" --> "1" Empleado : atiende
+    Cita "*" --> "1" Taller : usa
+    Cita "0..1" --> "1" Traje : se usa en
+    SesionActual --> Empleado : guarda
+</pre>
+</div>
+
+<footer>
+  Haz clic en "Descargar SVG" para guardar la imagen. Abre este archivo en Chrome, Edge o Firefox.
+</footer>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'default',
+    securityLevel: 'loose',
+    class: { useMaxWidth: false }
+  });
+</script>
+<script>
+  function downloadSVG() {
+    const svg = document.querySelector('.mermaid svg');
+    if (!svg) { alert('El diagrama aún se está cargando, espera un segundo.'); return; }
+    const serializer = new XMLSerializer();
+    const source = '<?xml version="1.0" standalone="no"?>\n' + serializer.serializeToString(svg);
+    const blob = new Blob([source], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'diagrama_clases_corregido.svg';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+</script>
+</body>
+</html>

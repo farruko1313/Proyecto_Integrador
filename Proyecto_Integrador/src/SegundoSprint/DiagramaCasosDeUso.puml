@@ -1,0 +1,69 @@
+@startuml DiagramaCasosDeUso_TallerEdnaModa
+' =====================================================
+' DIAGRAMA DE CASOS DE USO - Taller Edna Moda
+' Sprint #2 - [ED5]
+' =====================================================
+
+left to right direction
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
+
+actor Aprendiz  as AP
+actor Oficial   as OF
+actor Maestro   as MA
+
+AP -|> OF  : extiende
+OF -|> MA  : extiende
+
+rectangle "Sistema Taller Edna Moda" {
+
+    ' --- Autenticación ---
+    usecase "Iniciar sesión"       as UC_LOGIN
+    usecase "Cerrar sesión"        as UC_LOGOUT
+
+    ' --- Citas ---
+    usecase "Ver mis citas"        as UC_MIS_CITAS
+    usecase "Ver todas las citas"  as UC_VER_CITAS
+    usecase "Crear nueva cita"     as UC_CREAR_CITA
+    usecase "Editar cita propia"   as UC_EDITAR_CITA
+    usecase "Editar cualquier cita"as UC_EDITAR_CITA_M
+    usecase "Borrar cita"          as UC_BORRAR_CITA
+    usecase "Asignar aprendices"   as UC_ASIGNAR_AP
+
+    ' --- Talleres ---
+    usecase "Ver talleres"         as UC_VER_TALLERES
+    usecase "Crear taller"         as UC_CREAR_TALLER
+    usecase "Editar taller"        as UC_EDITAR_TALLER
+    usecase "Borrar taller"        as UC_BORRAR_TALLER
+
+    ' --- Clientes ---
+    usecase "Ver clientes"         as UC_VER_CLIENTES
+    usecase "Crear cliente"        as UC_CREAR_CLIENTE
+    usecase "Editar cliente"       as UC_EDITAR_CLIENTE
+    usecase "Borrar cliente"       as UC_BORRAR_CLIENTE
+}
+
+' Conexiones Aprendiz
+AP -- UC_LOGIN
+AP -- UC_LOGOUT
+AP -- UC_MIS_CITAS
+
+' Conexiones Oficial
+OF -- UC_VER_CITAS
+OF -- UC_CREAR_CITA
+OF -- UC_EDITAR_CITA
+OF -- UC_ASIGNAR_AP
+OF -- UC_VER_TALLERES
+
+' Conexiones Maestro
+MA -- UC_EDITAR_CITA_M
+MA -- UC_BORRAR_CITA
+MA -- UC_CREAR_TALLER
+MA -- UC_EDITAR_TALLER
+MA -- UC_BORRAR_TALLER
+MA -- UC_VER_CLIENTES
+MA -- UC_CREAR_CLIENTE
+MA -- UC_EDITAR_CLIENTE
+MA -- UC_BORRAR_CLIENTE
+
+@enduml
