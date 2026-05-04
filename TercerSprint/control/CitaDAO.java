@@ -7,13 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DAO para la entidad {@link Cita}.
+ * DAO para la entidad 
  * CRUD sobre las tablas <code>citas</code> y <code>cita_aprendices</code>.
  *
  * Sprint #3 - [PR4] Clase del Control encargada del acceso a BBDD.
- *
- * @author Equipo Proyecto Integrador 1ºDAW
- */
+ 
 public class CitaDAO {
 
     private Cita map(ResultSet rs) throws SQLException {
@@ -92,7 +90,7 @@ public class CitaDAO {
 
     /**
      * Crea una cita y asigna sus aprendices dentro de una transacción.
-     * @return id generado.
+     .
      */
     public int crear(Cita cita) throws SQLException {
         String insertCita = "INSERT INTO citas(id_cliente, id_traje, id_empleado_responsable, "
