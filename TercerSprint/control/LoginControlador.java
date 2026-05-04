@@ -1,3 +1,4 @@
+
 package TercerSprint.control;
 
 import SegundoSprint.vista.LoginVista;
@@ -8,7 +9,7 @@ import java.sql.SQLException;
 
 /**
  * Controlador de la ventana de login.
- * Une la {@link LoginVista} (Sprint 2) con el {@link EmpleadoDAO} (Sprint 3).
+ * Une la {@link LoginVista} (Sprint 2) con el {@link EmpleadoDAO} 
  *
  * Sprint #3 - [PR4] Clase del Control encargada del manejo de la aplicación.
  *
@@ -27,7 +28,7 @@ public class LoginControlador {
 
     /**
      * Intenta autenticar al empleado con las credenciales introducidas.
-     * Si son válidas, abre la {@link VentanaPrincipal} y cierra la vista login.
+     * Si son válidas, abre la  VentanaPrincipal y cierra la vista login.
      */
     private void intentarLogin() {
         String apodo = vista.getApodo();
